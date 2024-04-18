@@ -3,7 +3,7 @@
 
 
 def canUnlockAll(boxes):
-    '''Determines if all the boxes can be opened or not.
+    '''Determines if all the boxes can be opened.
 
     Args:
         boxes (list of list of int): Each box contains a list of keys.
@@ -13,17 +13,13 @@ def canUnlockAll(boxes):
     '''
 
     num_boxes = len(boxes)
-    keys = set()
-    opened_boxes = set()
-    stack = [0]
+    opened_boxes = set([0])
+    keys_collected = boxes[0]
 
-    while stack:
-        box_index = stack.pop()
-        opened_boxes.add(box_index)
-        keys.update(boxes[box_index])
-
-        for key in keys:
-            if 0 <= key < num_boxes and key not in opened_boxes:
-                stack.append(key)
+    while keys_collected:
+        current_key = keys_collected.pop(0)
+        if current_key < num_boxes and current_key not in opened_boxes:
+            opened_boxes.add(current_key)
+            keys_collected.extend(boxes[current_key])
 
     return len(opened_boxes) == num_boxes
