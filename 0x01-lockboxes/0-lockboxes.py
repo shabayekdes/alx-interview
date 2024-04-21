@@ -22,4 +22,7 @@ def canUnlockAll(boxes):
             opened_boxes.add(current_key)
             keys_collected.extend(boxes[current_key])
 
+            if len(opened_boxes) == num_boxes:
+                return True
+
     return len(opened_boxes) == num_boxes
