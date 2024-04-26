@@ -1,26 +1,38 @@
 #!/usr/bin/python3
-'''Minimum Operations python3 challenge'''
+'''Minimum Operations'''
 
 
 def minOperations(n):
-    '''calculates the fewest number of
-    operations needed to result in exactly n H
-    characters in this file.
-    Returns:
-        Integer : if n is impossible to achieve, return 0
+    '''calculates the fewest number
     '''
-    if n <= 0:
-        return 0
-    
-    operations = 0
-    current_length = 1
+    pasted_chars = 1
     clipboard = 0
+    counter = 0
 
-    while current_length < n:
-        if n % current_length == 0:
-            clipboard = current_length
+    while pasted_chars < n:
+        if clipboard == 0:
+            clipboard = pasted_chars
+            counter += 1
 
-        current_length += clipboard
-        operations += 1
+        if pasted_chars == 1:
+            pasted_chars += clipboard
+            counter += 1
+            continue
 
-    return operations if current_length == n else 0
+        remaining = n - pasted_chars
+
+        if remaining < clipboard:
+            return 0
+
+        if remaining % pasted_chars != 0:
+            pasted_chars += clipboard
+            counter += 1
+        else:
+            clipboard = pasted_chars
+            pasted_chars += clipboard
+            counter += 2
+
+    if pasted_chars == n:
+        return counter
+    else:
+        return 0
