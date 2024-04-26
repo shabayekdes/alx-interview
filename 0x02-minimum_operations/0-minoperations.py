@@ -9,34 +9,18 @@ def minOperations(n):
     Returns:
         Integer : if n is impossible to achieve, return 0
     '''
-    pasted_chars = 1
-    clipboard = 0
-    counter = 0
-
-    while pasted_chars < n:
-        if clipboard == 0:
-            clipboard = pasted_chars
-            counter += 1
-
-        if pasted_chars == 1:
-            pasted_chars += clipboard
-            counter += 1
-            continue
-
-        remaining = n - pasted_chars
-
-        if remaining < clipboard:
-            return 0
-
-        if remaining % pasted_chars != 0:
-            pasted_chars += clipboard
-            counter += 1
-        else:
-            clipboard = pasted_chars
-            pasted_chars += clipboard
-            counter += 2
-
-    if pasted_chars == n:
-        return counter
-    else:
+    if n <= 0:
         return 0
+    
+    operations = 0
+    current_length = 1
+    clipboard = 0
+
+    while current_length < n:
+        if n % current_length == 0:
+            clipboard = current_length
+
+        current_length += clipboard
+        operations += 1
+
+    return operations if current_length == n else 0
