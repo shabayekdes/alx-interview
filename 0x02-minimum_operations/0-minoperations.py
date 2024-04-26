@@ -5,34 +5,34 @@
 def minOperations(n):
     '''calculates the fewest number
     '''
-    pasted_chars = 1
+    p_char = 1
     clipboard = 0
-    counter = 0
+    i = 0
 
-    while pasted_chars < n:
+    while p_char < n:
         if clipboard == 0:
-            clipboard = pasted_chars
-            counter += 1
+            clipboard = p_char
+            i += 1
 
-        if pasted_chars == 1:
-            pasted_chars += clipboard
-            counter += 1
+        if p_char == 1:
+            p_char += clipboard
+            i += 1
             continue
 
-        remaining = n - pasted_chars
+        remaining = n - p_char
 
         if remaining < clipboard:
             return 0
 
-        if remaining % pasted_chars != 0:
-            pasted_chars += clipboard
-            counter += 1
+        if remaining % p_char != 0:
+            p_char += clipboard
+            i += 1
         else:
-            clipboard = pasted_chars
-            pasted_chars += clipboard
-            counter += 2
+            clipboard = p_char
+            p_char += clipboard
+            i += 2
 
-    if pasted_chars == n:
-        return counter
+    if p_char == n:
+        return i
     else:
         return 0
