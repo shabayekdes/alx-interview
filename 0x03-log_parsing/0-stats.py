@@ -21,8 +21,7 @@ def process_logs():
         for line in sys.stdin:
             line = line.strip()
             match = LOG_REGEX.match(line)
-
-            if not match:
+            if not match or len(match.groups()) != 3:
                 continue
 
             ip_address, status_code, file_size = match.groups()
