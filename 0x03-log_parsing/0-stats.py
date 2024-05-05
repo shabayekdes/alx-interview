@@ -21,7 +21,7 @@ def process_logs():
         for line in sys.stdin:
             line = line.strip()
             match = LOG_REGEX.match(line)
-            if not match or len(match.groups()) != 3:
+            if not match:
                 continue
 
             ip_address, status_code, file_size = match.groups()
@@ -36,11 +36,14 @@ def process_logs():
             line_count += 1
 
             if line_count % 10 == 0:
+                line_count = 0
                 print_stats(file_size_total, status_code_counts)
 
     except KeyboardInterrupt:
         print_stats(file_size_total, status_code_counts)
 
+    finally:
+        print_stats(file_size_total, status_code_counts)
 
 def print_stats(file_size_total, status_code_counts):
     print(f"File size: {file_size_total}")
