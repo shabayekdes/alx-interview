@@ -1,44 +1,59 @@
-#!/usr/bin/python3
-""" N queens """
+#!/usr/bin/env python3
 import sys
 
 
-if len(sys.argv) > 2 or len(sys.argv) < 2:
+if len(sys.argv) != 2:
     print("Usage: nqueens N")
-    exit(1)
+    sys.exit(1)
 
-if not sys.argv[1].isdigit():
+try:
+    N = int(sys.argv[1])
+except ValueError:
     print("N must be a number")
-    exit(1)
+    sys.exit(1)
 
-if int(sys.argv[1]) < 4:
+if N < 4:
     print("N must be at least 4")
-    exit(1)
+    sys.exit(1)
 
-n = int(sys.argv[1])
+def is_safe(board, row, col):
+    """Check if a queen can be placed on board[row][col]"""
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
 
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
 
-def queens(n, i=0, a=[], b=[], c=[]):
-    """ find possible positions """
-    if i < n:
-        for j in range(n):
-            if j not in a and i + j not in b and i - j not in c:
-                yield from queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
-    else:
-        yield a
+    for i, j in zip(range(row, len(board), 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
 
+    return True
 
-def solve(n):
-    """ solve """
-    k = []
-    i = 0
-    for solution in queens(n, 0):
-        for s in solution:
-            k.append([i, s])
-            i += 1
-        print(k)
-        k = []
-        i = 0
+def solve_nqueens_util(board, col, solutions):
+    """Utilize backtracking to find all solutions"""
+    if col >= len(board):
+        solutions.append([[i, row.index(1)] for i, row in enumerate(board)])
+        return
 
+    for i in range(len(board)):
+        if is_safe(board, i, col):
+            board[i][col] = 1
+            solve_nqueens_util(board, col + 1, solutions)
+            board[i][col] = 0
 
-solve(n)
+def solve_nqueens(N):
+    """Solve the N-Queens problem and print all solutions"""
+    board = [[0 for _ in range(N)] for _ in range(N)]
+    solutions = []
+    solve_nqueens_util(board, 0, solutions)
+    return solutions
+
+def main():
+    solutions = solve_nqueens(N)
+    for solution in solutions:
+        print(solution)
+
+main()
