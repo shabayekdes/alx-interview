@@ -2,19 +2,19 @@
 import sys
 
 
-if len(sys.argv) != 2:
+if len(sys.argv) > 2 or len(sys.argv) < 2:
     print("Usage: nqueens N")
-    sys.exit(1)
+    exit(1)
 
-try:
-    N = int(sys.argv[1])
-except ValueError:
+if not sys.argv[1].isdigit():
     print("N must be a number")
-    sys.exit(1)
+    exit(1)
 
-if N < 4:
+if int(sys.argv[1]) < 4:
     print("N must be at least 4")
-    sys.exit(1)
+    exit(1)
+
+n = int(sys.argv[1])
 
 
 def is_safe(board, row, col):
@@ -56,7 +56,7 @@ def solve_nqueens(N):
 
 
 def main():
-    solutions = solve_nqueens(N)
+    solutions = solve_nqueens(n)
     for solution in solutions:
         print(solution)
 
