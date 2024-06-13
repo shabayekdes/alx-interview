@@ -5,15 +5,18 @@
 
 def island_perimeter(grid):
     """Find perimeter of an island"""
-    perimeter = 0
-    num_rows, num_cols = len(grid), len(grid[0])
+    count = 0
+    row = len(grid)
+    col = len(grid[0]) if row else 0
 
-    for row in range(num_rows):
-        for col in range(num_cols):
-            if grid[row][col]:
-                for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                    x, y = row + dx, col + dy
-                    if x < 0 or x >= num_rows or y < 0 or y >= num_cols or not grid[x][y]:
-                        perimeter += 1
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            idx = [(i - 1, j), (i, j - 1), (i, j + 1), (i + 1, j)]
+            check = [1 if k[0] in range(row) and k[1] in range(col)
+                     else 0 for k in idx]
 
-    return perimeter
+            if grid[i][j]:
+                count += sum([1 if not r or not grid[k[0]][k[1]]
+                              else 0 for r, k in zip(check, idx)])
+
+    return count
