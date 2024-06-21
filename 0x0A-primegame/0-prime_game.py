@@ -2,41 +2,40 @@
 """0. Prime Game - Maria and Ben are playing a game"""
 
 
-def isWinner(x, nums):
-    """x - rounds
-    nums - numbers list
+def isWinner(rounds: int, numbers: list) -> str:
+    """Determines the winner of the prime game.
+
+    Args:
+    rounds (int): The number of rounds.
+    numbers (list): A list of numbers.
+
+    Returns:
+    str: The winner of the game, either "Ben" or "Maria"
+    or None if the input is invalid.
     """
-    if x <= 0 or nums is None:
-        return None
-    if x != len(nums):
+    if rounds <= 0 or numbers is None or rounds != len(numbers):
         return None
 
-    ben = 0
-    maria = 0
+    ben_score = 0
+    maria_score = 0
 
-    a = [1 for x in range(sorted(nums)[-1] + 1)]
-    a[0], a[1] = 0, 0
-    for i in range(2, len(a)):
-        rm_multiples(a, i)
+    prime_flags = [True] * (max(numbers) + 1)
+    prime_flags[0] = prime_flags[1] = False
 
-    for i in nums:
-        if sum(a[0:i + 1]) % 2 == 0:
-            ben += 1
+    for num in range(2, int(max(numbers) ** 0.5) + 1):
+        if prime_flags[num]:
+            for multiple in range(num * num, max(numbers) + 1, num):
+                prime_flags[multiple] = False
+
+    for num in numbers:
+        if sum(prime_flags[:num + 1]) % 2 == 0:
+            ben_score += 1
         else:
-            maria += 1
-    if ben > maria:
+            maria_score += 1
+
+    if ben_score > maria_score:
         return "Ben"
-    if maria > ben:
+    elif maria_score > ben_score:
         return "Maria"
-    return None
-
-
-def rm_multiples(ls, x):
-    """removes multiple
-    of primes
-    """
-    for i in range(2, len(ls)):
-        try:
-            ls[i * x] = 0
-        except (ValueError, IndexError):
-            break
+    else:
+        return None
